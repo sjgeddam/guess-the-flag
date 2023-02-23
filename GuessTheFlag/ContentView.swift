@@ -71,8 +71,8 @@ struct ContentView: View {
             }
             .padding()
         }
-        .alert("GAME OVER", isPresented: $gameEnd) {
-            Button("Start over", action: gameOver)
+        .alert("GAME OVER!! Your final score is \(userScore)/\(numQuestions)", isPresented: $gameEnd) {
+            Button("Restart Game", action: gameOver)
         }
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
@@ -83,25 +83,26 @@ struct ContentView: View {
     
     func flagTapped(_ number: Int) {
         numQuestions += 1
+        
         if (numQuestions == 8) {
             gameEnd = true
         }
-        if number == correctAnswer {
-            scoreTitle = "Correct"
+        
+        if (number == correctAnswer) {
+            scoreTitle = "Correct, great job!"
             userScore += 1
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong, that's the flag of \(countries[number])."
         }
-        if (numQuestions == 8) {
-            showingScore = false
-        } else {
-            showingScore = true
-        }
+        
+        // display score
+        showingScore = numQuestions == 8 ? false : true
     }
     
     func gameOver() {
         numQuestions = 0
         userScore = 0
+        askQuestion()
     }
     
     func askQuestion() {
